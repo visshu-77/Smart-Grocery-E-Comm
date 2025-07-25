@@ -5,8 +5,11 @@ const port = process.env.PORT || 3000;
 const app = express();
 dotenv.config();
 import userRoutes from './Routes/userRoutes.js';
+import adminRoutes from './Routes/adminRoutes.js';
+import productRoutes from './Routes/productRoutes.js';
+import categoryRoutes from './Routes/categoryRoutes.js';
 
-mongoose.connect("mongodb+srv://vishal676570:oM5N9RltpJJWRXQU@cluster0.e00ckzz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+mongoose.connect(process.env.MONGO_URL, {
   useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
@@ -16,12 +19,17 @@ mongoose.connect("mongodb+srv://vishal676570:oM5N9RltpJJWRXQU@cluster0.e00ckzz.m
 });
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 app.get('/', (req,res)=>{
     res.send('Hello E-commerce API');
 });
 
 app.use("/api",userRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/categories", categoryRoutes);
 
 app.listen(3000, () => {
   console.log(`Server is running on port number ${port}`);
